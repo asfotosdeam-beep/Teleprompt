@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teleprompter Docs | Premium</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="liquid-bg"></div>
+    <div id="app-container">
+        <!-- Sidebar para Clientes -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>DKPROD.</h3>
+                <button id="add-client-btn" title="Novo Cliente">+</button>
+            </div>
+            <div id="clients-list">
+                <!-- Clientes inseridos aqui -->
+            </div>
+        </nav>
+
+        <!-- Área Principal -->
+        <main id="main-content">
+            <div class="main-watermark"></div>
+            <!-- Tela de Seleção de Clientes (Landing Page) -->
+            <div id="clients-screen-dashboard">
+                <header class="centered-header">
+                    <h1>SELECIONE O CLIENTE</h1>
+                </header>
+                <div id="clients-grid" class="clients-grid">
+                    <!-- Cards de clientes aqui -->
+                </div>
+            </div>
+
+            <!-- Tela de Projetos (Dashboard do Cliente) -->
+            <div id="projects-screen" class="hidden">
+                <header class="centered-header">
+                    <button id="back-to-clients" class="btn-icon" title="Voltar para Clientes">&#x2190;</button>
+                    <div class="breadcrumb">
+                        <h1 id="current-client-name">NOME DO CLIENTE</h1>
+                    </div>
+                    <button id="add-project-btn" class="btn primary">Novo Roteiro</button>
+                </header>
+                <div id="projects-list" class="projects-grid">
+                    <!-- Projetos do cliente selecionado -->
+                </div>
+            </div>
+
+            <!-- Editor estilo Google Docs -->
+            <div id="controls-panel" class="hidden">
+                <div class="editor-toolbar">
+                    <button id="back-to-projects" class="btn secondary" title="Sair do Documento">Voltar</button>
+                    <input type="text" id="project-title-input" class="doc-title" value="Título do Roteiro">
+                    
+                    <div class="toolbar-actions">
+                        <div class="toolbar-group">
+                            <label>Velocidade</label>
+                            <input type="range" id="speed-slider" min="1" max="100" value="30">
+                            <span id="speed-val" class="value-badge">30</span>
+                        </div>
+                        <div class="toolbar-group">
+                            <label>Fonte</label>
+                            <input type="range" id="font-size-slider" min="20" max="200" value="60">
+                            <span id="font-size-val" class="value-badge">60</span>
+                        </div>
+                        <div class="toolbar-group">
+                            <label>Espaçamento</label>
+                            <input type="range" id="line-spacing-slider" min="10" max="50" value="15">
+                            <span id="line-spacing-val" class="value-badge">15</span>
+                        </div>
+                    </div>
+
+                    <button id="start-btn" class="btn primary">Apresentar</button>
+                </div>
+                
+                <div class="editor-canvas">
+                    <div class="paper">
+                        <textarea id="text-input" placeholder="Comece a escrever seu roteiro..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="prompter-screen" class="hidden">
+        <div class="prompter-watermark"></div>
+        <div id="scroll-container" style="width: 100%; display: flex; justify-content: center; will-change: transform;">
+            <div id="prompter-text"></div>
+        </div>
+        <!-- Botão Flutuante com Círculo -->
+        <div id="prompter-menu-btn">
+            <div class="circle-icon"></div>
+        </div>
+
+        <!-- Menu de Opções -->
+        <div id="prompter-overlay-menu">
+            <button id="menu-play-pause" class="menu-item" title="Play/Pause">&#x25B6;</button>
+            <button id="menu-restart" class="menu-item" title="Reiniciar">&#x21BB;</button>
+            <button id="menu-stop" class="menu-item danger" title="Fechar">&#x2715;</button>
+        </div>
+        <div class="focus-line"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
