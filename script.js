@@ -423,6 +423,32 @@ speedSlider.addEventListener('input', () => { updateSettings(); saveClientSettin
 fontSizeSlider.addEventListener('input', () => { updateSettings(); saveClientSettings(); });
 lineSpacingSlider.addEventListener('input', () => { updateSettings(); saveClientSettings(); });
 
+// --- Atalhos de Teclado ---
+
+window.addEventListener('keydown', (e) => {
+    // Só ativa atalhos se o prompter estiver aberto
+    if (prompterScreen.classList.contains('hidden')) return;
+
+    if (e.code === 'Space') {
+        e.preventDefault();
+        if (isPlaying) pause(); else play();
+    } else if (e.code === 'Escape') {
+        stopPrompter();
+    } else if (e.code === 'KeyR') {
+        restartPrompter();
+    } else if (e.code === 'ArrowUp') {
+        e.preventDefault();
+        speedSlider.value = Math.min(100, parseInt(speedSlider.value) + 5);
+        updateSettings();
+        saveClientSettings();
+    } else if (e.code === 'ArrowDown') {
+        e.preventDefault();
+        speedSlider.value = Math.max(1, parseInt(speedSlider.value) - 5);
+        updateSettings();
+        saveClientSettings();
+    }
+});
+
 // --- Inicialização ---
 
 function initApp() {
