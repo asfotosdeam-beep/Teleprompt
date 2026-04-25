@@ -80,6 +80,13 @@ function saveToLocalStorage() {
     localStorage.setItem('teleprompter_projects', JSON.stringify(projects));
 }
 
+function getInitials(name) {
+    if (!name) return "?";
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 function formatDate(timestamp) {
     const date = new Date(timestamp);
     const day = String(date.getDate()).padStart(2, '0');
@@ -126,9 +133,10 @@ function renderClients() {
     clientsList.innerHTML = '';
     clientsGrid.innerHTML = '';
 
+    // Card Adicionar (+)
     const addCard = document.createElement('div');
     addCard.className = 'client-card add-card';
-    addCard.innerHTML = '+';
+    addCard.innerHTML = '<span>+</span>';
     addCard.onclick = () => {
         if (isDeleteMode) toggleDeleteMode();
         addClient();
@@ -140,6 +148,7 @@ function renderClients() {
     );
 
     filteredClients.forEach(client => {
+        // Item na Sidebar
         const item = document.createElement('div');
         item.className = `client-item ${currentClientId === client.id ? 'active' : ''}`;
         item.innerHTML = `<span>${client.name}</span><button class="delete-client" data-id="${client.id}">&times;</button>`;
@@ -155,10 +164,14 @@ function renderClients() {
         };
         clientsList.appendChild(item);
 
+        // Card na Grid
         const card = document.createElement('div');
         const isSelected = selectedClientIds.includes(client.id);
         card.className = `client-card ${isDeleteMode ? 'delete-mode' : ''} ${isSelected ? 'selected' : ''}`;
-        card.innerHTML = `<h3>${client.name}</h3>`;
+        card.innerHTML = `
+            <div class="client-avatar">${getInitials(client.name)}</div>
+            <h3>${client.name}</h3>
+        `;
         card.onclick = () => {
             if (isDeleteMode) toggleClientSelection(client.id);
             else selectClient(client.id);
@@ -477,11 +490,6 @@ backToProjectsBtn.addEventListener('click', goBackToProjects);
 startBtn.addEventListener('click', startPrompter);
 
 // Busca e Exclusão
-searchToggleBtn.addEventListener('click', () => {
-    searchContainer.classList.toggle('hidden');
-    if (!searchContainer.classList.contains('hidden')) clientSearchInput.focus();
-});
-
 clientSearchInput.addEventListener('input', (e) => {
     searchQuery = e.target.value;
     renderClients();

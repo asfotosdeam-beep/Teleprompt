@@ -9,6 +9,15 @@
 </head>
 <body>
     <div class="liquid-bg"></div>
+    
+    <!-- Header Global -->
+    <header class="global-header">
+        <div class="logo-container">DECAPOD<span class="logo-dot">.</span></div>
+        <div class="header-right">
+            <button class="header-settings-btn btn-icon" title="Configurações">&#x2699;</button>
+        </div>
+    </header>
+
     <div id="app-container">
         <!-- Sidebar para Clientes -->
         <nav id="sidebar">
@@ -27,13 +36,15 @@
             <!-- Tela de Seleção de Clientes (Landing Page) -->
             <div id="clients-screen-dashboard">
                 <header class="centered-header">
-                    <div class="header-nav-top">
-                        <button id="search-toggle-btn" class="btn secondary" title="Pesquisar">&#x1F50D;</button>
-                        <button id="delete-mode-btn" class="btn secondary" title="Excluir Clientes">&#x1F5D1;</button>
+                    <h1>MEUS CLIENTES</h1>
+                    <p class="subtitle">Selecione um perfil para gerenciar roteiros e gravações.</p>
+                    
+                    <div class="search-bar">
+                        <input type="text" id="client-search-input" placeholder="Procurar cliente..." class="doc-title">
                     </div>
-                    <h1>SELECIONE O CLIENTE</h1>
-                    <div id="search-container" class="search-bar hidden">
-                        <input type="text" id="client-search-input" placeholder="Digite o nome do cliente..." class="doc-title">
+
+                    <div class="header-nav-top">
+                        <button id="delete-mode-btn" class="btn secondary" title="Excluir Clientes">&#x1F5D1;</button>
                     </div>
                 </header>
                 <div id="clients-grid" class="clients-grid">
@@ -89,6 +100,12 @@
                 </div>
             </div>
         </main>
+        
+        <!-- Footer Global -->
+        <footer id="main-footer">
+            <a class="footer-link">Gerenciar Assinaturas</a>
+            <a class="footer-link">Suporte</a>
+        </footer>
     </div>
 
     <div id="prompter-screen" class="hidden">
