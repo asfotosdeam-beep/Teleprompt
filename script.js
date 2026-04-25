@@ -1,36 +1,54 @@
-// Elementos da UI
-const sidebar = document.getElementById('sidebar');
-const appContainer = document.getElementById('app-container');
-const clientsList = document.getElementById('clients-list');
-const addClientBtn = document.getElementById('add-client-btn');
-const clientsScreenDashboard = document.getElementById('clients-screen-dashboard');
-const clientsGrid = document.getElementById('clients-grid');
-const currentClientName = document.getElementById('current-client-name');
-const backToClientsBtn = document.getElementById('back-to-clients');
+// Referências que serão capturadas após o carregamento do DOM
+let sidebar, clientsList, addClientBtn, clientsScreenDashboard, clientsGrid, currentClientName, backToClientsBtn;
+let projectsScreen, projectsList, addProjectBtn, backToProjectsBtn, projectTitleInput;
+let controlsPanel, prompterScreen, textInput, prompterText, speedSlider, fontSizeSlider, lineSpacingSlider, startBtn;
+let prompterMenuBtn, prompterOverlayMenu, menuPlayPause, menuRestart, menuStop;
+let customModal, modalTitle, modalInput, modalMessage, modalCancel, modalConfirm;
+let searchToggleBtn, deleteModeBtn, searchContainer, clientSearchInput;
+let appContainer;
 
-const projectsScreen = document.getElementById('projects-screen');
-const projectsList = document.getElementById('projects-list');
-const addProjectBtn = document.getElementById('add-project-btn');
-const backToProjectsBtn = document.getElementById('back-to-projects');
-const projectTitleInput = document.getElementById('project-title-input');
+function captureElements() {
+    sidebar = document.getElementById('sidebar');
+    appContainer = document.getElementById('app-container');
+    clientsList = document.getElementById('clients-list');
+    addClientBtn = document.getElementById('add-client-btn');
+    clientsScreenDashboard = document.getElementById('clients-screen-dashboard');
+    clientsGrid = document.getElementById('clients-grid');
+    currentClientName = document.getElementById('current-client-name');
+    backToClientsBtn = document.getElementById('back-to-clients');
+    
+    projectsScreen = document.getElementById('projects-screen');
+    projectsList = document.getElementById('projects-list');
+    addProjectBtn = document.getElementById('add-project-btn');
+    backToProjectsBtn = document.getElementById('back-to-projects');
+    projectTitleInput = document.getElementById('project-title-input');
+    
+    controlsPanel = document.getElementById('controls-panel');
+    prompterScreen = document.getElementById('prompter-screen');
+    textInput = document.getElementById('text-input');
+    prompterText = document.getElementById('prompter-text');
+    speedSlider = document.getElementById('speed-slider');
+    fontSizeSlider = document.getElementById('font-size-slider');
+    lineSpacingSlider = document.getElementById('line-spacing-slider');
+    startBtn = document.getElementById('start-btn');
+    
+    prompterMenuBtn = document.getElementById('prompter-menu-btn');
+    prompterOverlayMenu = document.getElementById('prompter-overlay-menu');
+    menuPlayPause = document.getElementById('menu-play-pause');
+    menuRestart = document.getElementById('menu-restart');
+    menuStop = document.getElementById('menu-stop');
+    
+    customModal = document.getElementById('custom-modal');
+    modalTitle = document.getElementById('modal-title');
+    modalInput = document.getElementById('modal-input');
+    modalMessage = document.getElementById('modal-message');
+    modalCancel = document.getElementById('modal-cancel');
+    modalConfirm = document.getElementById('modal-confirm');
+    
+    deleteModeBtn = document.getElementById('delete-mode-btn');
+    clientSearchInput = document.getElementById('client-search-input');
+}
 
-const controlsPanel = document.getElementById('controls-panel');
-const prompterScreen = document.getElementById('prompter-screen');
-const textInput = document.getElementById('text-input');
-const prompterText = document.getElementById('prompter-text');
-const speedSlider = document.getElementById('speed-slider');
-const fontSizeSlider = document.getElementById('font-size-slider');
-const lineSpacingSlider = document.getElementById('line-spacing-slider');
-const startBtn = document.getElementById('start-btn');
-
-// Elementos do Menu Flutuante do Prompter
-const prompterMenuBtn = document.getElementById('prompter-menu-btn');
-const prompterOverlayMenu = document.getElementById('prompter-overlay-menu');
-const menuPlayPause = document.getElementById('menu-play-pause');
-const menuRestart = document.getElementById('menu-restart');
-const menuStop = document.getElementById('menu-stop');
-
-// Estado Global
 // Estado Global
 let animationId;
 let isPlaying = false;
@@ -46,19 +64,6 @@ let currentProjectId = localStorage.getItem('teleprompter_last_project') || null
 let isDeleteMode = false;
 let selectedClientIds = [];
 let searchQuery = '';
-
-// Elementos Novos
-const customModal = document.getElementById('custom-modal');
-const modalTitle = document.getElementById('modal-title');
-const modalInput = document.getElementById('modal-input');
-const modalMessage = document.getElementById('modal-message');
-const modalCancel = document.getElementById('modal-cancel');
-const modalConfirm = document.getElementById('modal-confirm');
-
-const searchToggleBtn = document.getElementById('search-toggle-btn');
-const deleteModeBtn = document.getElementById('delete-mode-btn');
-const searchContainer = document.getElementById('search-container');
-const clientSearchInput = document.getElementById('client-search-input');
 
 // Migração de Dados
 function migrateData() {
@@ -495,96 +500,109 @@ function restartPrompter() {
 }
 
 // --- Event Listeners ---
-
-if (addClientBtn) addClientBtn.addEventListener('click', addClient);
-backToClientsBtn.addEventListener('click', showClientsDashboard);
-addProjectBtn.addEventListener('click', addProject);
-backToProjectsBtn.addEventListener('click', goBackToProjects);
-startBtn.addEventListener('click', startPrompter);
-
-// Busca e Exclusão
-clientSearchInput.addEventListener('input', (e) => {
-    searchQuery = e.target.value;
-    renderClients();
-});
-
-deleteModeBtn.addEventListener('click', toggleDeleteMode);
-
-// Menu Flutuante
-prompterMenuBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    prompterOverlayMenu.classList.toggle('show');
-});
-
-menuPlayPause.addEventListener('click', () => {
-    if (isPlaying) pause(); else play();
-});
-
-menuRestart.addEventListener('click', restartPrompter);
-menuStop.addEventListener('click', stopPrompter);
-
-// Fecha o menu ao clicar fora
-prompterScreen.addEventListener('click', () => {
-    prompterOverlayMenu.classList.remove('show');
-});
-
-textInput.addEventListener('input', () => {
-    if (currentProjectId) {
-        const project = projects.find(p => p.id === currentProjectId);
-        if (project) {
-            project.script = textInput.value;
-            project.updatedAt = Date.now();
-            saveToLocalStorage();
+function setupEventListeners() {
+    if (addClientBtn) addClientBtn.addEventListener('click', addClient);
+    if (backToClientsBtn) backToClientsBtn.addEventListener('click', showClientsDashboard);
+    if (addProjectBtn) addProjectBtn.addEventListener('click', addProject);
+    if (backToProjectsBtn) backToProjectsBtn.addEventListener('click', goBackToProjects);
+    if (startBtn) startBtn.addEventListener('click', startPrompter);
+    
+    // Busca e Exclusão
+    if (clientSearchInput) {
+        clientSearchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderClients();
+        });
+    }
+    
+    if (deleteModeBtn) deleteModeBtn.addEventListener('click', toggleDeleteMode);
+    
+    // Menu Flutuante
+    if (prompterMenuBtn) {
+        prompterMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            prompterOverlayMenu.classList.toggle('show');
+        });
+    }
+    
+    if (menuPlayPause) {
+        menuPlayPause.addEventListener('click', () => {
+            if (isPlaying) pause(); else play();
+        });
+    }
+    
+    if (menuRestart) menuRestart.addEventListener('click', restartPrompter);
+    if (menuStop) menuStop.addEventListener('click', stopPrompter);
+    
+    // Fecha o menu ao clicar fora
+    if (prompterScreen) {
+        prompterScreen.addEventListener('click', () => {
+            prompterOverlayMenu.classList.remove('show');
+        });
+    }
+    
+    if (textInput) {
+        textInput.addEventListener('input', () => {
+            if (currentProjectId) {
+                const project = projects.find(p => p.id === currentProjectId);
+                if (project) {
+                    project.script = textInput.value;
+                    project.updatedAt = Date.now();
+                    saveToLocalStorage();
+                }
+            }
+        });
+    }
+    
+    if (projectTitleInput) {
+        projectTitleInput.addEventListener('input', () => {
+            if (currentProjectId) {
+                const project = projects.find(p => p.id === currentProjectId);
+                if (project) {
+                    project.name = projectTitleInput.value;
+                    project.updatedAt = Date.now();
+                    saveToLocalStorage();
+                    renderProjects();
+                }
+            }
+        });
+    }
+    
+    if (speedSlider) speedSlider.addEventListener('input', () => { updateSettings(); saveClientSettings(); });
+    if (fontSizeSlider) fontSizeSlider.addEventListener('input', () => { updateSettings(); saveClientSettings(); });
+    if (lineSpacingSlider) lineSpacingSlider.addEventListener('input', () => { updateSettings(); saveClientSettings(); });
+    
+    // --- Atalhos de Teclado ---
+    window.addEventListener('keydown', (e) => {
+        if (!prompterScreen || prompterScreen.classList.contains('hidden')) return;
+    
+        if (e.code === 'Space') {
+            e.preventDefault();
+            if (isPlaying) pause(); else play();
+        } else if (e.code === 'Escape') {
+            stopPrompter();
+        } else if (e.code === 'KeyR') {
+            restartPrompter();
+        } else if (e.code === 'ArrowUp') {
+            e.preventDefault();
+            speedSlider.value = Math.min(100, parseInt(speedSlider.value) + 5);
+            updateSettings();
+            saveClientSettings();
+        } else if (e.code === 'ArrowDown') {
+            e.preventDefault();
+            speedSlider.value = Math.max(1, parseInt(speedSlider.value) - 5);
+            updateSettings();
+            saveClientSettings();
         }
-    }
-});
-
-projectTitleInput.addEventListener('input', () => {
-    if (currentProjectId) {
-        const project = projects.find(p => p.id === currentProjectId);
-        if (project) {
-            project.name = projectTitleInput.value;
-            project.updatedAt = Date.now();
-            saveToLocalStorage();
-            renderProjects();
-        }
-    }
-});
-
-speedSlider.addEventListener('input', () => { updateSettings(); saveClientSettings(); });
-fontSizeSlider.addEventListener('input', () => { updateSettings(); saveClientSettings(); });
-lineSpacingSlider.addEventListener('input', () => { updateSettings(); saveClientSettings(); });
-
-// --- Atalhos de Teclado ---
-
-window.addEventListener('keydown', (e) => {
-    // Só ativa atalhos se o prompter estiver aberto
-    if (prompterScreen.classList.contains('hidden')) return;
-
-    if (e.code === 'Space') {
-        e.preventDefault();
-        if (isPlaying) pause(); else play();
-    } else if (e.code === 'Escape') {
-        stopPrompter();
-    } else if (e.code === 'KeyR') {
-        restartPrompter();
-    } else if (e.code === 'ArrowUp') {
-        e.preventDefault();
-        speedSlider.value = Math.min(100, parseInt(speedSlider.value) + 5);
-        updateSettings();
-        saveClientSettings();
-    } else if (e.code === 'ArrowDown') {
-        e.preventDefault();
-        speedSlider.value = Math.max(1, parseInt(speedSlider.value) - 5);
-        updateSettings();
-        saveClientSettings();
-    }
-});
+    });
+}
 
 // --- Inicialização ---
 
 function initApp() {
+    captureElements();
     migrateData();
+    setupEventListeners();
     renderClients();
     
     const lastScreen = localStorage.getItem('teleprompter_last_screen');
@@ -601,4 +619,6 @@ function initApp() {
     }
 }
 
-initApp();
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+});
