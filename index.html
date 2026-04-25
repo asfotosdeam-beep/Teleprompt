@@ -35,11 +35,18 @@
 
     <div id="projects-screen" class="dashboard-screen hidden">
         <header class="centered-header">
-            <button id="back-to-clients" class="btn-glass">Voltar</button>
+            <div class="header-nav-left">
+                <button id="back-to-clients" class="btn-glass">Voltar</button>
+            </div>
             <h1 id="current-client-name">NOME DO CLIENTE</h1>
             <p class="subtitle">Gerencie seus roteiros e projetos de gravação.</p>
         </header>
-        <div class="projects-container">
+        
+        <div class="dashboard-content">
+            <div class="section-header">
+                <h3>Meus Roteiros</h3>
+                <button id="add-project-btn" class="btn-glass-accent">+ Novo Roteiro</button>
+            </div>
             <div id="projects-list" class="projects-grid">
                 <!-- Cards de projetos aqui -->
             </div>
@@ -63,7 +70,7 @@
             <!-- Editor estilo Google Docs -->
             <div id="controls-panel" class="hidden">
                 <div class="editor-toolbar">
-                    <button id="back-to-projects" class="btn secondary" title="Sair do Documento">Voltar</button>
+                    <button id="back-to-projects" class="btn-glass" title="Sair do Documento">Voltar</button>
                     <input type="text" id="project-title-input" class="doc-title" value="Título do Roteiro">
                     
                     <div class="toolbar-actions">
@@ -84,7 +91,7 @@
                         </div>
                     </div>
 
-                    <button id="start-btn" class="btn primary">Apresentar</button>
+                    <button id="start-btn" class="btn-glass-accent">Apresentar</button>
                 </div>
                 
                 <div class="editor-canvas">
@@ -130,8 +137,8 @@
                 <p id="modal-message" class="hidden"></p>
             </div>
             <div class="modal-actions">
-                <button id="modal-cancel" class="btn secondary">Cancelar</button>
-                <button id="modal-confirm" class="btn primary">Confirmar</button>
+                <button id="modal-cancel" class="btn-glass">Cancelar</button>
+                <button id="modal-confirm" class="btn-glass-accent">Confirmar</button>
             </div>
         </div>
     </div>

@@ -343,6 +343,82 @@ h1 {
     margin: 0 auto;
 }
 
+.btn-glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 10px 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: var(--font-inter);
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    outline: none;
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-glass-accent {
+    background: rgba(227, 6, 19, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--accent-red);
+    color: var(--accent-red);
+    padding: 12px 30px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: var(--font-inter);
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-glass-accent:hover {
+    background: rgba(227, 6, 19, 0.2);
+    box-shadow: 0 0 20px rgba(227, 6, 19, 0.3);
+    transform: translateY(-2px);
+}
+
+.header-nav-left {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dashboard-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 20px;
+}
+
+.section-header h3 {
+    font-family: var(--font-poppins);
+    font-size: 24px;
+    color: var(--text-main);
+    letter-spacing: 1px;
+}
+
 .project-card {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
