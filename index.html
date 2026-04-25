@@ -17,10 +17,14 @@
             <div class="header-search">
                 <input type="text" id="client-search-input" placeholder="Pesquisar..." class="glass-input-compact">
             </div>
-            <button id="delete-mode-btn" class="btn-icon" title="Excluir">&#x1F5D1;</button>
+            <button id="delete-mode-btn" class="btn-icon" title="Modo Exclusão">&#x1F5D1;</button>
             <button class="header-settings-btn btn-icon" title="Configurações">&#x2699;</button>
         </div>
     </header>
+
+    <div id="delete-confirm-container" class="hidden">
+        <button id="confirm-delete-btn" class="btn-delete-active">EXCLUIR SELECIONADOS (<span id="selected-count">0</span>)</button>
+    </div>
 
     <!-- Telas de Dashboard (Fora do App Container para evitar desvios de alinhamento) -->
     <div id="clients-screen-dashboard" class="dashboard-screen">

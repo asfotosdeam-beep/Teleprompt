@@ -47,6 +47,10 @@ function captureElements() {
     
     deleteModeBtn = document.getElementById('delete-mode-btn');
     clientSearchInput = document.getElementById('client-search-input');
+    
+    deleteConfirmContainer = document.getElementById('delete-confirm-container');
+    confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+    selectedCount = document.getElementById('selected-count');
 }
 
 // Estado Global
@@ -64,6 +68,11 @@ let currentProjectId = localStorage.getItem('teleprompter_last_project') || null
 let isDeleteMode = false;
 let selectedClientIds = [];
 let searchQuery = '';
+
+// Referências Novos Elementos
+let deleteConfirmContainer, confirmDeleteBtn, selectedCount;
+const dashboardTitle = document.querySelector('.centered-header h1');
+const dashboardSubtitle = document.querySelector('.centered-header .subtitle');
 
 // Migração de Dados
 function migrateData() {
@@ -231,24 +240,51 @@ function deleteClient(id) {
 
 function toggleDeleteMode() {
     isDeleteMode = !isDeleteMode;
-    deleteModeBtn.classList.toggle('primary');
-    if (!isDeleteMode && selectedClientIds.length > 0) {
-        showCustomModal({
-            title: "Excluir Selecionados",
-            message: `Deseja apagar os ${selectedClientIds.length} clientes selecionados?`,
-            showInput: false,
-            onConfirm: () => {
-                clients = clients.filter(c => !selectedClientIds.includes(c.id));
-                projects = projects.filter(p => !selectedClientIds.includes(p.clientId));
-                selectedClientIds = [];
-                saveToLocalStorage();
-                renderClients();
-            }
-        });
+    deleteModeBtn.classList.toggle('active-delete');
+    
+    const dashboardTitle = document.querySelector('#clients-screen-dashboard .centered-header h1');
+    const dashboardSubtitle = document.querySelector('#clients-screen-dashboard .centered-header .subtitle');
+
+    if (isDeleteMode) {
+        dashboardTitle.textContent = "SELECIONE PARA EXCLUIR";
+        dashboardTitle.style.color = "var(--accent-red)";
+        dashboardSubtitle.textContent = "Clique nos quadros que deseja remover do sistema.";
     } else {
+        dashboardTitle.textContent = "MEUS CLIENTES";
+        dashboardTitle.style.color = "white";
+        dashboardSubtitle.textContent = "Selecione um perfil para gerenciar roteiros e gravações.";
         selectedClientIds = [];
-        renderClients();
+        updateDeleteButton();
     }
+    renderClients();
+}
+
+function updateDeleteButton() {
+    if (selectedClientIds.length > 0) {
+        deleteConfirmContainer.classList.remove('hidden');
+        selectedCount.textContent = selectedClientIds.length;
+    } else {
+        deleteConfirmContainer.classList.add('hidden');
+    }
+}
+
+function confirmDeleteSelected() {
+    if (selectedClientIds.length === 0) return;
+    
+    showCustomModal({
+        title: "Excluir Selecionados",
+        message: `Deseja realmente apagar os ${selectedClientIds.length} clientes selecionados e todos os seus roteiros?`,
+        showInput: false,
+        onConfirm: () => {
+            clients = clients.filter(c => !selectedClientIds.includes(c.id));
+            projects = projects.filter(p => !selectedClientIds.includes(p.clientId));
+            selectedClientIds = [];
+            isDeleteMode = false;
+            toggleDeleteMode(); // Reset visual state
+            saveToLocalStorage();
+            renderClients();
+        }
+    });
 }
 
 function toggleClientSelection(id) {
@@ -257,6 +293,7 @@ function toggleClientSelection(id) {
     } else {
         selectedClientIds.push(id);
     }
+    updateDeleteButton();
     renderClients();
 }
 
@@ -516,6 +553,7 @@ function setupEventListeners() {
     }
     
     if (deleteModeBtn) deleteModeBtn.addEventListener('click', toggleDeleteMode);
+    if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', confirmDeleteSelected);
     
     // Menu Flutuante
     if (prompterMenuBtn) {
