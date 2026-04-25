@@ -47,6 +47,8 @@ function captureElements() {
     
     deleteModeBtn = document.getElementById('delete-mode-btn');
     clientSearchInput = document.getElementById('client-search-input');
+    searchToggleBtn = document.getElementById('search-toggle-btn');
+    searchContainer = document.getElementById('search-container');
     
     deleteConfirmContainer = document.getElementById('delete-confirm-container');
     confirmDeleteBtn = document.getElementById('confirm-delete-btn');
@@ -68,6 +70,7 @@ let currentProjectId = localStorage.getItem('teleprompter_last_project') || null
 let isDeleteMode = false;
 let selectedClientIds = [];
 let searchQuery = '';
+let isFirstLoad = true;
 
 // Referências Novos Elementos
 let deleteConfirmContainer, confirmDeleteBtn, selectedCount;
@@ -155,7 +158,7 @@ function renderClients() {
 
     // Card Adicionar (+)
     const addCard = document.createElement('div');
-    addCard.className = `client-card add-card ${isDeleteMode ? 'disabled' : ''}`;
+    addCard.className = `client-card add-card ${isDeleteMode ? 'disabled' : ''} ${isFirstLoad ? 'entrance-anim' : ''}`;
     addCard.innerHTML = '<span>+</span>';
     addCard.onclick = () => {
         if (isDeleteMode) return;
@@ -187,7 +190,16 @@ function renderClients() {
         // Card na Grid
         const card = document.createElement('div');
         const isSelected = selectedClientIds.includes(client.id);
-        card.className = `client-card ${isDeleteMode ? 'delete-mode-active' : ''} ${isSelected ? 'selected' : ''}`;
+        
+        let cardClasses = `client-card ${isDeleteMode ? 'delete-mode-active' : ''} ${isSelected ? 'selected' : ''}`;
+        
+        if (isFirstLoad) {
+            cardClasses += ' entrance-anim';
+        } else if (searchQuery.length > 0) {
+            cardClasses += ' search-result-anim';
+        }
+        
+        card.className = cardClasses;
         card.innerHTML = `
             <div class="client-avatar">${getInitials(client.name)}</div>
             <h3>${client.name}</h3>
@@ -198,6 +210,8 @@ function renderClients() {
         };
         clientsGrid.appendChild(card);
     });
+
+    isFirstLoad = false; // Désativa animação de entrada após a primeira execução
 
     if (currentClientId) {
         const activeClient = clients.find(c => c.id === currentClientId);
@@ -558,6 +572,21 @@ function setupEventListeners() {
     
     if (deleteModeBtn) deleteModeBtn.addEventListener('click', toggleDeleteMode);
     if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', confirmDeleteSelected);
+    
+    if (searchToggleBtn) {
+        searchToggleBtn.addEventListener('click', () => {
+            searchContainer.classList.toggle('expanded');
+            if (searchContainer.classList.contains('expanded')) {
+                clientSearchInput.classList.remove('hidden');
+                clientSearchInput.focus();
+            } else {
+                clientSearchInput.classList.add('hidden');
+                searchQuery = '';
+                clientSearchInput.value = '';
+                renderClients();
+            }
+        });
+    }
     
     // Menu Flutuante
     if (prompterMenuBtn) {
