@@ -14,6 +14,10 @@
     <header class="global-header">
         <div class="logo-container">DECAPOD<span class="logo-dot">.</span></div>
         <div class="header-right">
+            <div class="header-search">
+                <input type="text" id="client-search-input" placeholder="Pesquisar..." class="glass-input-compact">
+            </div>
+            <button id="delete-mode-btn" class="btn-icon" title="Excluir">&#x1F5D1;</button>
             <button class="header-settings-btn btn-icon" title="Configurações">&#x2699;</button>
         </div>
     </header>
@@ -38,14 +42,6 @@
                 <header class="centered-header">
                     <h1>MEUS CLIENTES</h1>
                     <p class="subtitle">Selecione um perfil para gerenciar roteiros e gravações.</p>
-                    
-                    <div class="search-bar">
-                        <input type="text" id="client-search-input" placeholder="Procurar cliente..." class="doc-title">
-                    </div>
-
-                    <div class="header-nav-top">
-                        <button id="delete-mode-btn" class="btn secondary" title="Excluir Clientes">&#x1F5D1;</button>
-                    </div>
                 </header>
                 <div id="clients-grid" class="clients-grid">
                     <!-- Cards de clientes aqui -->
