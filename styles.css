@@ -191,11 +191,11 @@ h1 {
 }
 
 #clients-screen-dashboard, #projects-screen {
-    /* These now use .dashboard-screen class logic indirectly or directly */
     width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex-grow: 1;
 }
 
 .clients-grid {
@@ -246,14 +246,16 @@ h1 {
 
 .client-card h3 {
     font-family: var(--font-inter);
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--text-main);
     text-transform: uppercase;
     letter-spacing: 1px;
     text-align: center;
     margin: 0;
-    line-height: 1.3;
+    line-height: 1.2;
+    padding: 0 10px;
+    pointer-events: none;
 }
 
 .client-card.add-card {
@@ -752,13 +754,29 @@ input[type="range"] { accent-color: var(--accent-red); width: 80px; }
     border-color: var(--accent-red);
 }
 
-.header-settings-btn {
-    opacity: 0.5;
-    transition: opacity 0.3s;
+.header-right .btn-icon {
+    background: none !important;
+    border: none !important;
+    color: #888;
+    opacity: 0.7;
     font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 5px;
+    width: 32px;
+    height: 32px;
+}
+
+.header-right .btn-icon:hover {
+    opacity: 1;
+    color: var(--accent-red);
+}
+
+.header-settings-btn {
+    font-size: 20px;
 }
 .modal-overlay {
     position: fixed;
