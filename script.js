@@ -30,6 +30,7 @@ const menuRestart = document.getElementById('menu-restart');
 const menuStop = document.getElementById('menu-stop');
 
 // Estado Global
+// Estado Global
 let animationId;
 let isPlaying = false;
 let speed = 1.5;
@@ -39,6 +40,24 @@ let clients = JSON.parse(localStorage.getItem('teleprompter_clients')) || [];
 let projects = JSON.parse(localStorage.getItem('teleprompter_projects')) || [];
 let currentClientId = localStorage.getItem('teleprompter_last_client') || null;
 let currentProjectId = localStorage.getItem('teleprompter_last_project') || null;
+
+// Novo Estado
+let isDeleteMode = false;
+let selectedClientIds = [];
+let searchQuery = '';
+
+// Elementos Novos
+const customModal = document.getElementById('custom-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalInput = document.getElementById('modal-input');
+const modalMessage = document.getElementById('modal-message');
+const modalCancel = document.getElementById('modal-cancel');
+const modalConfirm = document.getElementById('modal-confirm');
+
+const searchToggleBtn = document.getElementById('search-toggle-btn');
+const deleteModeBtn = document.getElementById('delete-mode-btn');
+const searchContainer = document.getElementById('search-container');
+const clientSearchInput = document.getElementById('client-search-input');
 
 // Migração de Dados
 function migrateData() {
@@ -68,8 +87,37 @@ function formatDate(timestamp) {
     const year = date.getFullYear();
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    return `${day}/${month}/${year} às ${hours}:${minutes}:${seconds}`;
+    return `${day}/${month}/${year} às ${hours}:${minutes}`;
+}
+
+// --- Modais Customizados ---
+
+function showCustomModal({ title, placeholder, message, showInput = true, onConfirm }) {
+    modalTitle.textContent = title;
+    modalInput.placeholder = placeholder || '';
+    modalInput.value = '';
+    modalMessage.textContent = message || '';
+    
+    if (showInput) {
+        modalInput.classList.remove('hidden');
+        modalMessage.classList.add('hidden');
+    } else {
+        modalInput.classList.add('hidden');
+        modalMessage.classList.remove('hidden');
+    }
+    
+    customModal.classList.remove('hidden');
+    modalInput.focus();
+    
+    modalConfirm.onclick = () => {
+        const value = modalInput.value;
+        customModal.classList.add('hidden');
+        onConfirm(value);
+    };
+    
+    modalCancel.onclick = () => {
+        customModal.classList.add('hidden');
+    };
 }
 
 // --- Lógica de Clientes ---
@@ -81,34 +129,40 @@ function renderClients() {
     const addCard = document.createElement('div');
     addCard.className = 'client-card add-card';
     addCard.innerHTML = '+';
-    addCard.onclick = addClient;
+    addCard.onclick = () => {
+        if (isDeleteMode) toggleDeleteMode();
+        addClient();
+    };
     clientsGrid.appendChild(addCard);
 
-    if (clients.length === 0) {
-        const defaultClient = { 
-            id: Date.now().toString(), 
-            name: 'Meu Primeiro Cliente', 
-            createdAt: Date.now(),
-            settings: { speed: 30, fontSize: 60, lineSpacing: 15 }
-        };
-        clients.push(defaultClient);
-        saveToLocalStorage();
-    }
+    const filteredClients = clients.filter(c => 
+        c.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-    clients.forEach(client => {
+    filteredClients.forEach(client => {
         const item = document.createElement('div');
         item.className = `client-item ${currentClientId === client.id ? 'active' : ''}`;
         item.innerHTML = `<span>${client.name}</span><button class="delete-client" data-id="${client.id}">&times;</button>`;
         item.onclick = (e) => {
-            if (e.target.classList.contains('delete-client')) deleteClient(client.id);
-            else selectClient(client.id);
+            if (e.target.classList.contains('delete-client')) {
+                showCustomModal({
+                    title: "Excluir Cliente",
+                    message: `Deseja realmente excluir ${client.name} e todos os seus roteiros?`,
+                    showInput: false,
+                    onConfirm: () => deleteClient(client.id)
+                });
+            } else selectClient(client.id);
         };
         clientsList.appendChild(item);
 
         const card = document.createElement('div');
-        card.className = 'client-card';
+        const isSelected = selectedClientIds.includes(client.id);
+        card.className = `client-card ${isDeleteMode ? 'delete-mode' : ''} ${isSelected ? 'selected' : ''}`;
         card.innerHTML = `<h3>${client.name}</h3>`;
-        card.onclick = () => selectClient(client.id);
+        card.onclick = () => {
+            if (isDeleteMode) toggleClientSelection(client.id);
+            else selectClient(client.id);
+        };
         clientsGrid.appendChild(card);
     });
 
@@ -119,33 +173,67 @@ function renderClients() {
 }
 
 function addClient() {
-    const name = prompt("Nome do novo cliente:");
-    if (name) {
-        const newClient = {
-            id: Date.now().toString(),
-            name: name,
-            createdAt: Date.now(),
-            settings: { speed: 30, fontSize: 60, lineSpacing: 15 }
-        };
-        clients.push(newClient);
-        saveToLocalStorage();
-        renderClients();
-        selectClient(newClient.id);
-    }
+    showCustomModal({
+        title: "Novo Cliente",
+        placeholder: "Digite o nome do cliente...",
+        onConfirm: (name) => {
+            if (name) {
+                const newClient = {
+                    id: Date.now().toString(),
+                    name: name,
+                    createdAt: Date.now(),
+                    settings: { speed: 30, fontSize: 60, lineSpacing: 15 }
+                };
+                clients.push(newClient);
+                saveToLocalStorage();
+                renderClients();
+                selectClient(newClient.id);
+            }
+        }
+    });
 }
 
 function deleteClient(id) {
-    if (confirm("Isso excluirá o cliente e TODOS os seus projetos. Confirmar?")) {
-        clients = clients.filter(c => c.id !== id);
-        projects = projects.filter(p => p.clientId !== id);
-        if (currentClientId === id) {
-            currentClientId = null;
-            showClientsDashboard();
-        }
-        saveToLocalStorage();
-        renderClients();
-        renderProjects();
+    clients = clients.filter(c => c.id !== id);
+    projects = projects.filter(p => p.clientId !== id);
+    if (currentClientId === id) {
+        currentClientId = null;
+        showClientsDashboard();
     }
+    saveToLocalStorage();
+    renderClients();
+    renderProjects();
+}
+
+function toggleDeleteMode() {
+    isDeleteMode = !isDeleteMode;
+    deleteModeBtn.classList.toggle('primary');
+    if (!isDeleteMode && selectedClientIds.length > 0) {
+        showCustomModal({
+            title: "Excluir Selecionados",
+            message: `Deseja apagar os ${selectedClientIds.length} clientes selecionados?`,
+            showInput: false,
+            onConfirm: () => {
+                clients = clients.filter(c => !selectedClientIds.includes(c.id));
+                projects = projects.filter(p => !selectedClientIds.includes(p.clientId));
+                selectedClientIds = [];
+                saveToLocalStorage();
+                renderClients();
+            }
+        });
+    } else {
+        selectedClientIds = [];
+        renderClients();
+    }
+}
+
+function toggleClientSelection(id) {
+    if (selectedClientIds.includes(id)) {
+        selectedClientIds = selectedClientIds.filter(cid => cid !== id);
+    } else {
+        selectedClientIds.push(id);
+    }
+    renderClients();
 }
 
 function selectClient(id) {
@@ -209,28 +297,38 @@ function renderProjects() {
 
 function addProject() {
     if (!currentClientId) return;
-    const name = prompt("Nome do novo roteiro:");
-    if (name) {
-        const newProject = {
-            id: Date.now().toString(),
-            clientId: currentClientId,
-            name: name,
-            script: "Comece seu roteiro aqui...",
-            updatedAt: Date.now()
-        };
-        projects.push(newProject);
-        saveToLocalStorage();
-        renderProjects();
-        openProject(newProject.id);
-    }
+    showCustomModal({
+        title: "Novo Roteiro",
+        placeholder: "Digite o título do roteiro...",
+        onConfirm: (name) => {
+            if (name) {
+                const newProject = {
+                    id: Date.now().toString(),
+                    clientId: currentClientId,
+                    name: name,
+                    script: "Comece seu roteiro aqui...",
+                    updatedAt: Date.now()
+                };
+                projects.push(newProject);
+                saveToLocalStorage();
+                renderProjects();
+                openProject(newProject.id);
+            }
+        }
+    });
 }
 
 function deleteProject(id) {
-    if (confirm("Excluir este roteiro?")) {
-        projects = projects.filter(p => p.id !== id);
-        saveToLocalStorage();
-        renderProjects();
-    }
+    showCustomModal({
+        title: "Excluir Roteiro",
+        message: "Tem certeza que deseja apagar este roteiro permanentemente?",
+        showInput: false,
+        onConfirm: () => {
+            projects = projects.filter(p => p.id !== id);
+            saveToLocalStorage();
+            renderProjects();
+        }
+    });
 }
 
 function openProject(id) {
@@ -377,6 +475,19 @@ backToClientsBtn.addEventListener('click', showClientsDashboard);
 addProjectBtn.addEventListener('click', addProject);
 backToProjectsBtn.addEventListener('click', goBackToProjects);
 startBtn.addEventListener('click', startPrompter);
+
+// Busca e Exclusão
+searchToggleBtn.addEventListener('click', () => {
+    searchContainer.classList.toggle('hidden');
+    if (!searchContainer.classList.contains('hidden')) clientSearchInput.focus();
+});
+
+clientSearchInput.addEventListener('input', (e) => {
+    searchQuery = e.target.value;
+    renderClients();
+});
+
+deleteModeBtn.addEventListener('click', toggleDeleteMode);
 
 // Menu Flutuante
 prompterMenuBtn.addEventListener('click', (e) => {

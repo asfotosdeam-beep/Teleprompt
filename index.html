@@ -27,7 +27,14 @@
             <!-- Tela de Seleção de Clientes (Landing Page) -->
             <div id="clients-screen-dashboard">
                 <header class="centered-header">
+                    <div class="header-nav-top">
+                        <button id="search-toggle-btn" class="btn secondary" title="Pesquisar">&#x1F50D;</button>
+                        <button id="delete-mode-btn" class="btn secondary" title="Excluir Clientes">&#x1F5D1;</button>
+                    </div>
                     <h1>SELECIONE O CLIENTE</h1>
+                    <div id="search-container" class="search-bar hidden">
+                        <input type="text" id="client-search-input" placeholder="Digite o nome do cliente..." class="doc-title">
+                    </div>
                 </header>
                 <div id="clients-grid" class="clients-grid">
                     <!-- Cards de clientes aqui -->
@@ -101,6 +108,21 @@
             <button id="menu-stop" class="menu-item danger" title="Fechar">&#x2715;</button>
         </div>
 
+    </div>
+
+    <!-- Modal Customizado -->
+    <div id="custom-modal" class="modal-overlay hidden">
+        <div class="glass-modal">
+            <h2 id="modal-title">Novo Cliente</h2>
+            <div class="modal-content">
+                <input type="text" id="modal-input" class="doc-title" placeholder="Digite aqui...">
+                <p id="modal-message" class="hidden"></p>
+            </div>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn secondary">Cancelar</button>
+                <button id="modal-confirm" class="btn primary">Confirmar</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
