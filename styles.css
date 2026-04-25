@@ -179,15 +179,23 @@ h1 {
     text-transform: uppercase;
 }
 
-/* Client Dashboard */
-#clients-screen-dashboard {
-    width: 100%;
-    min-height: 100%;
-    overflow-y: auto;
+.dashboard-screen {
+    width: 100vw;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 0; /* Vertical padding only */
+    padding: 60px 0;
+    position: relative;
+    z-index: 10;
+}
+
+#clients-screen-dashboard, #projects-screen {
+    /* These now use .dashboard-screen class logic indirectly or directly */
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .clients-grid {
@@ -205,15 +213,15 @@ h1 {
 .client-card {
     background: var(--bg-card);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 24px;
-    width: 250px; /* Perfect square */
-    height: 250px; /* Perfect square */
+    border-radius: 16px;
+    width: 220px; /* Elegant rectangle */
+    height: 320px; /* Elegant rectangle */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    padding: 20px;
+    gap: 30px;
+    padding: 30px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     flex-shrink: 0;

@@ -22,7 +22,31 @@
         </div>
     </header>
 
-    <div id="app-container">
+    <!-- Telas de Dashboard (Fora do App Container para evitar desvios de alinhamento) -->
+    <div id="clients-screen-dashboard" class="dashboard-screen">
+        <header class="centered-header">
+            <h1>MEUS CLIENTES</h1>
+            <p class="subtitle">Selecione um perfil para gerenciar roteiros e gravações.</p>
+        </header>
+        <div id="clients-grid" class="clients-grid">
+            <!-- Cards de clientes aqui -->
+        </div>
+    </div>
+
+    <div id="projects-screen" class="dashboard-screen hidden">
+        <header class="centered-header">
+            <button id="back-to-clients" class="btn-glass">Voltar</button>
+            <h1 id="current-client-name">NOME DO CLIENTE</h1>
+            <p class="subtitle">Gerencie seus roteiros e projetos de gravação.</p>
+        </header>
+        <div class="projects-container">
+            <div id="projects-list" class="projects-grid">
+                <!-- Cards de projetos aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div id="app-container" class="hidden">
         <!-- Sidebar para Clientes -->
         <nav id="sidebar">
             <div class="sidebar-header">
@@ -34,34 +58,8 @@
             </div>
         </nav>
 
-        <!-- Área Principal -->
+        <!-- Área Principal (Editor/Prompter Setup) -->
         <main id="main-content">
-            <div class="main-watermark"></div>
-            <!-- Tela de Seleção de Clientes (Landing Page) -->
-            <div id="clients-screen-dashboard">
-                <header class="centered-header">
-                    <h1>MEUS CLIENTES</h1>
-                    <p class="subtitle">Selecione um perfil para gerenciar roteiros e gravações.</p>
-                </header>
-                <div id="clients-grid" class="clients-grid">
-                    <!-- Cards de clientes aqui -->
-                </div>
-            </div>
-
-            <!-- Tela de Projetos (Dashboard do Cliente) -->
-            <div id="projects-screen" class="hidden">
-                <header class="centered-header">
-                    <button id="back-to-clients" class="btn secondary" title="Voltar para Clientes">Voltar</button>
-                    <div class="breadcrumb">
-                        <h1 id="current-client-name">NOME DO CLIENTE</h1>
-                    </div>
-                    <button id="add-project-btn" class="btn primary">Novo Roteiro</button>
-                </header>
-                <div id="projects-list" class="projects-grid">
-                    <!-- Projetos do cliente selecionado -->
-                </div>
-            </div>
-
             <!-- Editor estilo Google Docs -->
             <div id="controls-panel" class="hidden">
                 <div class="editor-toolbar">

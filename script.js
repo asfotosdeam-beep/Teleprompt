@@ -1,5 +1,6 @@
 // Elementos da UI
 const sidebar = document.getElementById('sidebar');
+const appContainer = document.getElementById('app-container');
 const clientsList = document.getElementById('clients-list');
 const addClientBtn = document.getElementById('add-client-btn');
 const clientsScreenDashboard = document.getElementById('clients-screen-dashboard');
@@ -264,8 +265,8 @@ function selectClient(id) {
     renderClients();
     renderProjects();
     
+    appContainer.classList.add('hidden');
     clientsScreenDashboard.classList.add('hidden');
-    sidebar.classList.remove('hidden');
     projectsScreen.classList.remove('hidden');
     controlsPanel.classList.add('hidden');
     localStorage.setItem('teleprompter_last_screen', 'projects');
@@ -276,10 +277,10 @@ function showClientsDashboard() {
     localStorage.removeItem('teleprompter_last_client');
     localStorage.setItem('teleprompter_last_screen', 'clients');
     
+    appContainer.classList.add('hidden');
     clientsScreenDashboard.classList.remove('hidden');
     projectsScreen.classList.add('hidden');
     controlsPanel.classList.add('hidden');
-    sidebar.classList.add('hidden');
     renderClients();
 }
 
@@ -350,8 +351,12 @@ function openProject(id) {
     if (project) {
         textInput.value = project.script;
         projectTitleInput.value = project.name;
+        
+        appContainer.classList.remove('hidden');
+        clientsScreenDashboard.classList.add('hidden');
         projectsScreen.classList.add('hidden');
         controlsPanel.classList.remove('hidden');
+        
         localStorage.setItem('teleprompter_last_project', id);
         localStorage.setItem('teleprompter_last_screen', 'controls');
     }
@@ -368,8 +373,11 @@ function goBackToProjects() {
         }
     }
     currentProjectId = null;
+    
+    appContainer.classList.add('hidden');
     controlsPanel.classList.add('hidden');
     projectsScreen.classList.remove('hidden');
+    
     localStorage.removeItem('teleprompter_last_project');
     localStorage.setItem('teleprompter_last_screen', 'projects');
     renderProjects();
