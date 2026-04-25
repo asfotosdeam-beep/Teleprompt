@@ -319,12 +319,26 @@ h1 {
     box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
 }
 
-.client-card.selected {
-    background: rgba(255, 0, 0, 0.25) !important;
-    border-color: #ff0000 !important;
-    opacity: 1 !important;
+.client-card.delete-mode-active {
     transform: scale(0.95);
+    opacity: 0.8;
 }
+
+.client-card.selected {
+    background: rgba(227, 6, 19, 0.2) !important;
+    border-color: var(--accent-red) !important;
+    opacity: 1 !important;
+    transform: scale(0.98);
+    box-shadow: 0 0 30px rgba(227, 6, 19, 0.3);
+}
+
+.client-card.add-card.disabled {
+    opacity: 0.15 !important;
+    pointer-events: none;
+    cursor: default;
+    filter: grayscale(1) blur(1px);
+}
+
 
 .client-card h3 {
     font-family: var(--font-inter);

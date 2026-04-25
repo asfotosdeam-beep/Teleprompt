@@ -155,10 +155,10 @@ function renderClients() {
 
     // Card Adicionar (+)
     const addCard = document.createElement('div');
-    addCard.className = 'client-card add-card';
+    addCard.className = `client-card add-card ${isDeleteMode ? 'disabled' : ''}`;
     addCard.innerHTML = '<span>+</span>';
     addCard.onclick = () => {
-        if (isDeleteMode) toggleDeleteMode();
+        if (isDeleteMode) return;
         addClient();
     };
     clientsGrid.appendChild(addCard);
@@ -187,7 +187,7 @@ function renderClients() {
         // Card na Grid
         const card = document.createElement('div');
         const isSelected = selectedClientIds.includes(client.id);
-        card.className = `client-card ${isDeleteMode ? 'delete-mode' : ''} ${isSelected ? 'selected' : ''}`;
+        card.className = `client-card ${isDeleteMode ? 'delete-mode-active' : ''} ${isSelected ? 'selected' : ''}`;
         card.innerHTML = `
             <div class="client-avatar">${getInitials(client.name)}</div>
             <h3>${client.name}</h3>
@@ -249,10 +249,14 @@ function toggleDeleteMode() {
         dashboardTitle.textContent = "SELECIONE PARA EXCLUIR";
         dashboardTitle.style.color = "var(--accent-red)";
         dashboardSubtitle.textContent = "Clique nos quadros que deseja remover do sistema.";
+        deleteModeBtn.textContent = "CANCELAR";
+        deleteModeBtn.classList.add('btn-text-mode');
     } else {
         dashboardTitle.textContent = "MEUS CLIENTES";
         dashboardTitle.style.color = "white";
         dashboardSubtitle.textContent = "Selecione um perfil para gerenciar roteiros e gravações.";
+        deleteModeBtn.innerHTML = "&#x1F5D1;";
+        deleteModeBtn.classList.remove('btn-text-mode');
         selectedClientIds = [];
         updateDeleteButton();
     }
