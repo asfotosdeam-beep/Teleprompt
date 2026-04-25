@@ -202,12 +202,13 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    gap: 30px;
+    align-items: flex-start;
+    gap: 40px;
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 20px 40px;
+    min-height: 400px; /* Force space for cards */
 }
 
 .client-card {
@@ -757,8 +758,8 @@ input[type="range"] { accent-color: var(--accent-red); width: 80px; }
 .header-right .btn-icon {
     background: none !important;
     border: none !important;
-    color: #888;
-    opacity: 0.7;
+    color: #fff; /* Brighter icons for visibility */
+    opacity: 0.6;
     font-size: 20px;
     cursor: pointer;
     transition: all 0.3s;
@@ -766,13 +767,14 @@ input[type="range"] { accent-color: var(--accent-red); width: 80px; }
     align-items: center;
     justify-content: center;
     padding: 5px;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
 }
 
 .header-right .btn-icon:hover {
     opacity: 1;
     color: var(--accent-red);
+    transform: scale(1.1);
 }
 
 .header-settings-btn {

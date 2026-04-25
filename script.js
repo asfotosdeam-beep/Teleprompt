@@ -131,6 +131,11 @@ function showCustomModal({ title, placeholder, message, showInput = true, onConf
 // --- Lógica de Clientes ---
 
 function renderClients() {
+    const clientsList = document.getElementById('clients-list');
+    const clientsGrid = document.getElementById('clients-grid');
+    
+    if (!clientsList || !clientsGrid) return;
+    
     clientsList.innerHTML = '';
     clientsGrid.innerHTML = '';
 
