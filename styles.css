@@ -84,12 +84,11 @@ body::-webkit-scrollbar {
     border-bottom: 1px solid var(--border-color);
 }
 
-.sidebar-header h3 {
-    font-family: var(--font-poppins);
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--accent-red);
-    letter-spacing: 1px;
+.sidebar-logo {
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(227, 6, 19, 0.2));
 }
 
 #add-client-btn {
@@ -857,12 +856,16 @@ input[type="range"] { accent-color: var(--accent-red); width: 80px; }
 }
 
 .logo-container {
-    font-family: var(--font-poppins);
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text-main);
-    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
     animation: slideFromLeft 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.main-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(227, 6, 19, 0.3));
 }
 
 @keyframes slideFromLeft {
